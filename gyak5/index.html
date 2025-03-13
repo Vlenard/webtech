@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the num</title>
+    <script>
+        const targetNumber = Math.floor(Math.random() * 1000001);
+        const maxAttempts = 20;
+        let attempts = 0;
+        let guessed = false;
+
+        while (attempts < maxAttempts && !guessed) {
+            let userInput = prompt(`Add meg a tipped (${attempts + 1}/${maxAttempts}):`);
+            let guess = parseInt(userInput);
+
+            if (isNaN(guess)) {
+                alert("Érvénytelen bemenet! Kérlek, adj meg egy számot.");
+                continue;
+            }
+
+            attempts++;
+
+            if (guess === targetNumber) {
+                alert(`Gratulálok, ${attempts} lépésből eltaláltad!`);
+                guessed = true;
+            } else if (guess > targetNumber) {
+                alert(`${attempts}. tipp nem talált: A megoldás kisebb.`);
+            } else {
+                alert(`${attempts}. tipp nem talált: A megoldás nagyobb.`);
+            }
+        }
+
+        if (!guessed) {
+            alert("Sajnos ez most nem sikerült!");
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
