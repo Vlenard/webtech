@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teendő Lista</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="container">
+        <h2>Teendő Lista</h2>
+        <div id="input-container">
+            <input type="text" id="todo-input" placeholder="Adj hozzá egy teendőt">
+            <button onclick="addTodo()">Hozzáadás</button>
+        </div>
+        <ul id="todo-list"></ul>
+    </div>
+
+    <script>
+        function addTodo() {
+            var input = document.getElementById("todo-input");
+            var text = input.value.trim();
+            if (text === "") return;
+            
+            var li = document.createElement("li");
+            li.textContent = text;
+            li.className = "todo-item";
+            li.onclick = function() {
+                this.classList.toggle("completed");
+            };
+            
+            document.getElementById("todo-list").appendChild(li);
+            input.value = "";
+        }
+    </script>
+</body>
+</html>
