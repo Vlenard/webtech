@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git app - Repo keresés</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js"></script>
+</head>
+
+<body>
+    <h4>Repository keresése</h4>
+    <label for="repo-name">Repository neve:</label>
+    <input type="text" name="repo-name" id="repo-name">
+    <button id="repo-search-btn" class="btn btn-primary">Keresés</button>
+    <div id="results" style="margin-top: 5px;"></div>
+    <script>
+        const searchBtn = document.querySelector("#repo-search-btn")
+        searchBtn.addEventListener('click', () => {
+            const searchText = document.querySelector('#repo-name').value
+            loadRepositories(searchText)
+        })
+
+        function loadRepositories(searchText) {
+            fetch('https://api.github.com/search/repositories?q=' + encodeURIComponent(searchText), {
+                headers: {
+                    'Authorization': 'Bearer ' + GITHUB_ACCESS_TOKEN
+                }
+            })
+                .then(res => res.json())
+                .then(result => {
+                    const resultDiv = document.querySelector('#results')
+                    resultDiv.innerHTML = ''
+                    for (const repo of result.items) {
+                        const repoHTML = `
+                        <div class="card">
+                            <a href="repo.html?name=${encodeURIComponent(repo.full_name)}<h4>${repo.full_name}</h4></a>
+                            <p>${repo.description}</p>
+                            <p><strong>Topics:</strong>${repo.topics.join(', ')}</p>
+                        </div>    
+                    `
+                        resultDiv.innerHTML += repoHTML
+                    }
+                })
+        }
+    </script>
+</body>
+
+</html>
