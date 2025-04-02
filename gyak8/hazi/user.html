@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git App - User adatlap</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="profile">
+            <img id="avatar" alt="User Avatar" />
+            <h2 id="name"></h2>
+            <p id="bio"></p>
+            <p id="location"></p>
+            <p id="blog"></p>
+            <p id="public_repos"></p>
+            <p id="followers"></p>
+        </div>
+    </div>
+
+    <script>
+        async function loadUser(username) {
+            try {
+                const res = await fetch(`https://api.github.com/users/${username}`);
+                if (!res.ok) throw new Error(`Server error: ${res.status}`);
+
+                const { avatar_url, name, bio, location, blog, public_repos, followers } = await res.json();
+
+                document.getElementById('avatar')?.setAttribute('src', avatar_url || '');
+                document.getElementById('name')?.textContent = name ? `Name: ${name}` : '';
+                document.getElementById('bio')?.textContent = bio ? `Bio: ${bio}` : '';
+                document.getElementById('location')?.textContent = location ? `Location: ${location}` : '';
+                document.getElementById('blog')?.innerHTML = blog ? `Blog: <a href="${blog}" target="_blank">${blog}</a>` : '';
+                document.getElementById('public_repos')?.textContent = public_repos ? `Public Repos: ${public_repos}` : '';
+                document.getElementById('followers')?.textContent = followers ? `Followers: ${followers}` : '';
+            } catch (error) {
+                console.error(error);
+                document.body.innerHTML = '<h2>Error loading user data</h2>';
+            }
+        }
+
+        (function () {
+            const userId = new URLSearchParams(window.location.search).get('id');
+            userId ? loadUser(userId) : (document.body.innerHTML = '<h2>No user provided</h2>');
+        })();
+    </script>
+</body>
+
+</html>
